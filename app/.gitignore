@@ -1,0 +1,36 @@
+# Dependencias
+node_modules/
+.pnpm-store/
+
+# Archivos de entorno
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Directorios de compilación
+dist/
+build/
+*.tsbuildinfo
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Directorios de IDE y editores
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Archivos de cobertura de pruebas
+coverage/
+
+# Archivos temporales
+tmp/
+temp/ 
