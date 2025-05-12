@@ -2,6 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes';
+import sauceRoutes from './routes/sauceRoutes';
+import toppingRoutes from './routes/toppingRoutes';
+import productRoutes from './routes/productRoutes';
 import { testConnection } from './config/database';
 
 dotenv.config();
@@ -23,6 +26,9 @@ app.get('/', (_req, res) => {
 
 // Rutas
 app.use('/api/users', userRoutes);
+app.use('/api/sauces', sauceRoutes);
+app.use('/api/toppings', toppingRoutes);
+app.use('/api/products', productRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
