@@ -7,6 +7,8 @@ class User extends Model {
   public name!: string;
   public email!: string;
   public password!: string;
+  public role!: 'admin' | 'user';
+  public googleId?: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
@@ -36,7 +38,17 @@ User.init(
     },
     password: {
       type: DataTypes.STRING,
+      allowNull: true, // Permitir null para usuarios de Google
+    },
+    role: {
+      type: DataTypes.ENUM('admin', 'user'),
+      defaultValue: 'user',
       allowNull: false,
+    },
+    googleId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
     },
   },
   {
