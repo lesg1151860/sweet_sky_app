@@ -1,10 +1,14 @@
 import { Router } from 'express';
-import { register, login, recoverPassword } from '../controllers/userController';
+import { register, login, getProfile } from '../controllers/userController';
+import { authMiddleware } from '../middlewares/auth';
 
 const router = Router();
 
+// Rutas públicas
 router.post('/register', register);
 router.post('/login', login);
-router.post('/recover-password', recoverPassword);
+
+// Rutas protegidas
+router.get('/profile', authMiddleware, getProfile);
 
 export default router; 
