@@ -5,6 +5,7 @@ import userRoutes from './routes/userRoutes';
 import sauceRoutes from './routes/sauceRoutes';
 import toppingRoutes from './routes/toppingRoutes';
 import productRoutes from './routes/productRoutes';
+import presentationRoutes from './routes/presentationRoutes';
 import { testConnection } from './config/database';
 
 dotenv.config();
@@ -29,6 +30,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/sauces', sauceRoutes);
 app.use('/api/toppings', toppingRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/presentations', presentationRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
