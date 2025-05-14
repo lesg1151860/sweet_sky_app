@@ -14,7 +14,7 @@ const Navbar = () => {
       <Flex h={16} alignItems="center" justifyContent="space-between">
         <RouterLink to="/">
           <Image
-            src="/logo.png"
+            src="/image/Logo SweetSky.webp"
             alt="Sweet Sky Logo"
             h="40px"
             objectFit="contain"
