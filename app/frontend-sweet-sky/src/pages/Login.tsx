@@ -10,10 +10,13 @@ import {
   Image,
   Divider,
   FormErrorMessage,
+  Link,
+  HStack,
 } from '@chakra-ui/react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import { useState, useEffect } from 'react';
+import { useToast } from '@chakra-ui/react';
 
 const validateEmail = (email: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -27,6 +30,8 @@ const Login = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [logoLoaded, setLogoLoaded] = useState(false);
+  const navigate = useNavigate();
+  const toast = useToast();
 
   useEffect(() => {
     setLogoLoaded(true);
@@ -48,11 +53,28 @@ const Login = () => {
     }
   }, [password]);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!emailError && !passwordError && email && password) {
+      // Simulación de login exitoso
+      const user = { name: email.split('@')[0] };
+      localStorage.setItem('sweet_sky_user', JSON.stringify(user));
+      toast({
+        title: 'Inicio de sesión exitoso',
+        status: 'success',
+        duration: 2500,
+        isClosable: true,
+        position: 'top',
+      });
+      setTimeout(() => navigate('/'), 1200);
+    }
+  };
+
   return (
     <Center minH="100vh" bg="brand.background">
       <Box
         bg="white"
-        p={8}
+        p={{ base: 6, md: 8 }}
         borderRadius="lg"
         boxShadow="md"
         w="full"
@@ -64,7 +86,7 @@ const Login = () => {
           alt="Logo"
           mx="auto"
           mb={4}
-          boxSize="100px"
+          boxSize="110px"
           style={{
             boxShadow: '0 8px 24px 0 rgba(255,105,180,0.25)',
             transition: 'transform 0.6s cubic-bezier(.68,-0.55,.27,1.55)',
@@ -81,27 +103,16 @@ const Login = () => {
             100% { transform: translateY(0) scale(1); opacity: 1; }
           }
         `}</style>
-        <Text fontSize="2xl" fontWeight="bold" color="brand.text" mb={2}>
+        <Text fontSize="2xl" fontWeight="bold" color="brand.text" mb={1}>
           Sweet Sky Admin / Cliente
         </Text>
         <Text color="gray.500" mb={6}>
           Ingresa tus credenciales para acceder
         </Text>
-        <Button
-          leftIcon={<FcGoogle />}
-          colorScheme="gray"
-          variant="outline"
-          w="full"
-          mb={4}
-          // Aquí puedes conectar la lógica de Google y validar el rol admin/cliente
-        >
-          Iniciar sesión con Google
-        </Button>
-        <Divider my={4} />
-        <form>
+        <form onSubmit={handleSubmit}>
           <VStack spacing={4} align="stretch">
             <FormControl isInvalid={!!emailError}>
-              <FormLabel>Correo electrónico</FormLabel>
+              <FormLabel fontWeight="semibold">Correo electrónico</FormLabel>
               <Input
                 type="email"
                 placeholder="Ingresa tu correo"
@@ -111,7 +122,7 @@ const Login = () => {
               {emailError && <FormErrorMessage>{emailError}</FormErrorMessage>}
             </FormControl>
             <FormControl isInvalid={!!passwordError}>
-              <FormLabel>Contraseña</FormLabel>
+              <FormLabel fontWeight="semibold">Contraseña</FormLabel>
               <Input
                 type="password"
                 placeholder="Ingresa tu contraseña"
@@ -122,20 +133,40 @@ const Login = () => {
             </FormControl>
             <Button
               colorScheme="pink"
-              bg="brand.primary"
-              _hover={{ bg: 'brand.secondary' }}
+              bg="#9C5B2B"
+              _hover={{ bg: '#7a3f13' }}
               type="submit"
               isDisabled={!!emailError || !!passwordError || !email || !password}
+              fontWeight="bold"
+              fontSize="lg"
+              mt={2}
             >
               Iniciar sesión
             </Button>
           </VStack>
         </form>
-        <Text mt={4} fontSize="sm">
-          ¿No tienes cuenta?{' '}
-          <Button as={RouterLink} to="/register" variant="link" color="brand.primary" fontWeight="bold">
+        <HStack justify="center" mt={4} mb={2}>
+          <Text fontSize="sm">¿No tienes cuenta?</Text>
+          <Link as={RouterLink} to="/register" color="brand.primary" fontWeight="bold" fontSize="sm">
             Regístrate
-          </Button>
+          </Link>
+        </HStack>
+        <Divider my={4}>
+          <Text color="gray.400" fontWeight="bold">o</Text>
+        </Divider>
+        <Button
+          leftIcon={<FcGoogle />}
+          colorScheme="gray"
+          variant="outline"
+          w="full"
+          fontWeight="bold"
+          fontSize="md"
+          // Aquí puedes conectar la lógica de Google y validar el rol admin/cliente
+        >
+          Iniciar sesión con Google
+        </Button>
+        <Text mt={8} color="gray.400" fontSize="sm">
+          © 2025 Sweet Sky Pastelería
         </Text>
       </Box>
     </Center>
