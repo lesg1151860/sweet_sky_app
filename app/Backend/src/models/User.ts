@@ -1,74 +1,86 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database';
+import mongoose, { Document, Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-class User extends Model {
-  public id!: number;
-  public name!: string;
-  public email!: string;
-  public password!: string;
-  public role!: 'admin' | 'user';
-  public googleId?: string;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-
-  public async comparePassword(candidatePassword: string): Promise<boolean> {
-    return bcrypt.compare(candidatePassword, this.password);
-  }
+export interface IUser extends Document {
+  name: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phone: string;
+  address: string;
+  role: 'admin' | 'client';
+  googleId?: string;
+  comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-User.init(
+const userSchema = new Schema<IUser>(
   {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     name: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: String,
+      required: [true, 'El nombre es requerido'],
+      trim: true,
+    },
+    lastName: {
+      type: String,
+      required: [true, 'El apellido es requerido'],
+      trim: true,
     },
     email: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: String,
+      required: [true, 'El email es requerido'],
       unique: true,
-      validate: {
-        isEmail: true,
-      },
+      trim: true,
+      lowercase: true,
+      match: [/^\S+@\S+\.\S+$/, 'Por favor ingrese un email válido'],
     },
     password: {
-      type: DataTypes.STRING,
-      allowNull: true, // Permitir null para usuarios de Google
+      type: String,
+      required: [true, 'La contraseña es requerida'],
+      minlength: [8, 'La contraseña debe tener al menos 8 caracteres'],
+    },
+    phone: {
+      type: String,
+      required: [true, 'El teléfono es requerido'],
+      trim: true,
+    },
+    address: {
+      type: String,
+      required: [true, 'La dirección es requerida'],
+      trim: true,
     },
     role: {
-      type: DataTypes.ENUM('admin', 'user'),
-      defaultValue: 'user',
-      allowNull: false,
+      type: String,
+      enum: ['admin', 'client'],
+      default: 'client',
     },
     googleId: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      unique: true,
+      type: String,
+      sparse: true,
     },
   },
   {
-    sequelize,
-    modelName: 'User',
-    hooks: {
-      beforeCreate: async (user: User) => {
-        if (user.password) {
-          const salt = await bcrypt.genSalt(10);
-          user.password = await bcrypt.hash(user.password, salt);
-        }
-      },
-      beforeUpdate: async (user: User) => {
-        if (user.changed('password')) {
-          const salt = await bcrypt.genSalt(10);
-          user.password = await bcrypt.hash(user.password, salt);
-        }
-      },
-    },
+    timestamps: true,
   }
 );
 
-export default User; 
+// Middleware para encriptar contraseña antes de guardar
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error: any) {
+    next(error);
+  }
+});
+
+// Método para comparar contraseñas
+userSchema.methods.comparePassword = async function (
+  candidatePassword: string
+): Promise<boolean> {
+  return bcrypt.compare(candidatePassword, this.password);
+};
+
+export default mongoose.model<IUser>('User', userSchema); 
