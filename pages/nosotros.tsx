@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Box,
   Container,
@@ -6,7 +8,11 @@ import {
   Stack,
   Image,
   useColorModeValue,
+  Flex,
+  SimpleGrid,
+  Icon,
 } from '@chakra-ui/react';
+import { StarIcon, ViewIcon, TimeIcon } from '@chakra-ui/icons';
 
 const Nosotros = () => {
   return (
@@ -15,14 +21,16 @@ const Nosotros = () => {
         <Stack spacing={4} as={Container} maxW={'3xl'} textAlign={'center'} mb={10}>
           <Heading fontSize={'3xl'}>Sobre Nosotros</Heading>
           <Text color={'gray.600'} fontSize={'xl'}>
-            Conoce la historia detrás de Sweet Sky
+            Conoce más sobre Sweet Sky y nuestros valores
           </Text>
         </Stack>
 
+        {/* Nuestra Historia */}
         <Stack
           align={'center'}
           spacing={{ base: 8, md: 10 }}
-          direction={{ base: 'column', md: 'row' }}>
+          direction={{ base: 'column', md: 'row' }}
+          mb={20}>
           <Stack flex={1} spacing={{ base: 5, md: 10 }}>
             <Heading
               lineHeight={1.1}
@@ -82,6 +90,102 @@ const Nosotros = () => {
             </Box>
           </Flex>
         </Stack>
+
+        {/* Misión y Visión */}
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} mb={20}>
+          {/* Misión */}
+          <Box
+            bg={useColorModeValue('white', 'gray.800')}
+            p={8}
+            rounded={'xl'}
+            boxShadow={'lg'}
+            position={'relative'}>
+            <Icon
+              as={StarIcon}
+              w={10}
+              h={10}
+              color="brand.primary"
+              position={'absolute'}
+              top={-5}
+              left={5}
+            />
+            <Stack spacing={4}>
+              <Heading size="lg">Nuestra Misión</Heading>
+              <Text color={'gray.500'}>
+                Crear experiencias dulces únicas que deleiten a nuestros clientes,
+                utilizando ingredientes de la más alta calidad y técnicas artesanales
+                innovadoras. Nos comprometemos a ofrecer un servicio excepcional y
+                productos que superen las expectativas.
+              </Text>
+            </Stack>
+          </Box>
+
+          {/* Visión */}
+          <Box
+            bg={useColorModeValue('white', 'gray.800')}
+            p={8}
+            rounded={'xl'}
+            boxShadow={'lg'}
+            position={'relative'}>
+            <Icon
+              as={ViewIcon}
+              w={10}
+              h={10}
+              color="brand.primary"
+              position={'absolute'}
+              top={-5}
+              left={5}
+            />
+            <Stack spacing={4}>
+              <Heading size="lg">Nuestra Visión</Heading>
+              <Text color={'gray.500'}>
+                Ser reconocidos como la pastelería líder en innovación y calidad,
+                expandiendo nuestra presencia mientras mantenemos nuestros valores
+                artesanales y el compromiso con la excelencia en cada producto que
+                creamos.
+              </Text>
+            </Stack>
+          </Box>
+        </SimpleGrid>
+
+        {/* Valores */}
+        <Box
+          bg={useColorModeValue('white', 'gray.800')}
+          p={8}
+          rounded={'xl'}
+          boxShadow={'lg'}
+          mb={10}>
+          <Stack spacing={4}>
+            <Heading size="lg" textAlign="center" mb={6}>
+              Nuestros Valores
+            </Heading>
+            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
+              <Box textAlign="center">
+                <Icon as={StarIcon} w={8} h={8} color="brand.primary" mb={4} />
+                <Heading size="md" mb={4}>Calidad</Heading>
+                <Text color={'gray.500'}>
+                  Utilizamos solo los mejores ingredientes y mantenemos los más altos
+                  estándares en cada producto.
+                </Text>
+              </Box>
+              <Box textAlign="center">
+                <Icon as={ViewIcon} w={8} h={8} color="brand.primary" mb={4} />
+                <Heading size="md" mb={4}>Innovación</Heading>
+                <Text color={'gray.500'}>
+                  Constantemente exploramos nuevas técnicas y sabores para sorprender
+                  a nuestros clientes.
+                </Text>
+              </Box>
+              <Box textAlign="center">
+                <Icon as={TimeIcon} w={8} h={8} color="brand.primary" mb={4} />
+                <Heading size="md" mb={4}>Pasión</Heading>
+                <Text color={'gray.500'}>
+                  Amamos lo que hacemos y ponemos nuestro corazón en cada creación.
+                </Text>
+              </Box>
+            </SimpleGrid>
+          </Stack>
+        </Box>
       </Container>
     </Box>
   );

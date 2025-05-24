@@ -1,7 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import type { AppProps } from 'next/app';
-import theme from '../src/theme/theme';
-import Navbar from '../src/components/Navbar';
+import theme from '../theme/theme';
+import Navbar from '../components/Navbar';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
